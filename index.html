@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>XML to JSON Converter</title>
+</head>
+<body>
+    <div class="container">
+        <h1>XML to JSON Converter</h1>
+
+        <div class="input-row">
+            <div class="input-container">
+                <label for="xmlInput">XML Content:</label>
+                <textarea id="xmlInput" rows="10"></textarea>
+            </div>
+
+            <button onclick="convertXmlToJson()">XML to JSON</button>
+
+            <div class="input-container">
+                <label for="jsonOutput">JSON Output:</label>
+                <textarea id="jsonOutput" readonly rows="10"></textarea>
+            </div>
+        </div>
+
+        <!-- New Download Button -->
+        <button id="downloadButton" onclick="downloadJson()">Download JSON</button>
+    </div>
+
+    <script>
+        function convertXmlToJson() {
+            const xmlContent = document.getElementById('xmlInput').value;
+
+            fetch('xmlToJson.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/xml'
+                },
+                body: xmlContent
+            })
+            .then(response => response.json())
+            .then(json => {
+                const beautifiedJson = JSON.stringify(json, null, 2);
+                document.getElementById('jsonOutput').value = beautifiedJson;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function downloadJson() {
+            const jsonContent = document.getElementById('jsonOutput').value;
+
+            if (jsonContent) {
+                const blob = new Blob([jsonContent], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'output.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } else {
+                console.error('JSON content is empty.');
+            }
+        }
+    </script>
+
+</body>
+</html>

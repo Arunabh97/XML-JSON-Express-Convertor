@@ -5,7 +5,13 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Debugging statement
+    error_log('Received a POST request');
+
     $xmlContent = file_get_contents('php://input');
+
+    // Debugging statement
+    error_log('XML content received: ' . $xmlContent);
 
     if (!empty($xmlContent)) {
         libxml_use_internal_errors(true); // Enable internal XML errors handling
@@ -34,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['error' => 'XML content is empty']);
     }
 } else {
+    // Debugging statement
+    error_log('Invalid request method: ' . $_SERVER['REQUEST_METHOD']);
+
     http_response_code(405); // Method Not Allowed
     echo json_encode(['error' => 'Invalid request method']);
 }

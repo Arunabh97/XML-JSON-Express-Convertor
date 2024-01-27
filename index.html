@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <title>XML to JSON Converter</title>
 </head>
@@ -13,6 +14,9 @@
         <div class="input-row">
             <div class="input-container">
                 <label for="xmlInput">XML Content:</label>
+                <div class="clear-icon" onclick="clearXmlInput()">
+                    <i class="fas fa-times"></i>
+                </div>
                 <textarea id="xmlInput" rows="10"></textarea>
             </div>
 
@@ -20,24 +24,61 @@
 
             <div class="input-container">
                 <label for="jsonOutput">JSON Output:</label>
+                <div class="clear-icon2" onclick="clearXmlInput()">
+                    <i class="fas fa-times"></i>
+                </div>
                 <textarea id="jsonOutput" readonly rows="10"></textarea>
             </div>
         </div>
-
+        
+        <div class="input-file">
+            <div class="file-input-container">
+                <label for="fileInput" class="file-label">Choose XML File</label>
+                <input type="file" id="fileInput" accept=".xml">
+            </div>
+        </div>
+          
         <!-- New Download Button -->
         <button id="downloadButton" onclick="downloadJson()">Download JSON</button>
     </div>
 
     <script>
         function convertXmlToJson() {
-            const xmlContent = document.getElementById('xmlInput').value;
+            const xmlInputTextarea = document.getElementById('xmlInput');
+            const fileInput = document.getElementById('fileInput');
 
+            let xmlContent;
+
+            if (xmlInputTextarea.value.trim() !== '') {
+                // If XML content is entered in the textarea
+                xmlContent = xmlInputTextarea.value;
+            } else if (fileInput.files.length > 0) {
+                // If an XML file is selected
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    xmlContent = event.target.result;
+                    sendXmlToServer(xmlContent);
+                };
+
+                reader.readAsText(file);
+                return;
+            } else {
+                console.error('XML content is empty.');
+                return;
+            }
+
+            sendXmlToServer(xmlContent);
+        }
+
+        function sendXmlToServer(xmlContent) {
             fetch('xmlToJson.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/xml'
+                    'Content-Type': 'application/xml',
                 },
-                body: xmlContent
+                body: xmlContent,
             })
             .then(response => response.json())
             .then(json => {
@@ -67,7 +108,9 @@
                 console.error('JSON content is empty.');
             }
         }
+         function clearXmlInput() {
+            document.getElementById('xmlInput').value = '';
+        }
     </script>
-
 </body>
 </html>

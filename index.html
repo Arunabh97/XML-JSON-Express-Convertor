@@ -29,7 +29,7 @@
 
             <div class="input-container">
                 <label for="jsonOutput">JSON Output:</label>
-                <div class="clear-icon2" onclick="clearXmlInput()">
+                <div class="clear-icon2" onclick="clearJsonOutput()">
                     <i class="fas fa-times"></i>
                 </div>
                 <textarea id="jsonOutput" readonly rows="10"></textarea>
@@ -113,8 +113,11 @@
                 console.error('JSON content is empty.');
             }
         }
-         function clearXmlInput() {
+        function clearXmlInput() {
             document.getElementById('xmlInput').value = '';
+        }
+        function clearJsonOutput() {
+            document.getElementById('jsonOutput').value = '';
         }
     </script>
 </body>

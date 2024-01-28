@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>JSON to XML Converter</title>
+</head>
+<body>
+    
+    <div class="container">
+        
+        <div class="navbar">
+            <a href="index.html">XML to JSON</a>
+            <a href="jsontoxml.html">JSON to XML</a>
+        </div>
+        <h1>JSON to XML Converter</h1>
+        <div class="input-row">
+            <div class="input-container">
+                <label for="jsonInput">JSON Content:</label>
+                <div class="clear-icon" onclick="clearJsonInput()">
+                    <i class="fas fa-times"></i>
+                </div>
+                <textarea id="jsonInput" rows="10"></textarea>
+            </div>
+
+            <button onclick="convertJsonToXml()">JSON to XML</button>
+
+            <div class="input-container">
+                <label for="xmlOutput">XML Output:</label>
+                <div class="clear-icon2" onclick="clearXmlOutput()">
+                    <i class="fas fa-times"></i>
+                </div>
+                <textarea id="xmlOutput" readonly rows="10"></textarea>
+            </div>
+        </div>
+        
+        <div class="input-file">
+            <div class="file-input-container">
+                <label for="fileInput" class="file-label">Choose JSON File</label>
+                <input type="file" id="fileInput" accept=".json">
+            </div>
+        </div>
+          
+        <!-- New Download Button -->
+        <button id="downloadButton" onclick="downloadXml()">Download XML</button>
+    </div>
+
+    <script>
+        function convertJsonToXml() {
+            var jsonInput = document.getElementById('jsonInput').value;
+    
+            // Send JSON data to the PHP file for conversion
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'json_to_xml.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        // Update the XML Output textarea with the converted XML
+                        document.getElementById('xmlOutput').value = xhr.responseText;
+                    } else {
+                        // Handle the error, display an alert or log it
+                        console.error('Error converting JSON to XML:', xhr.status, xhr.statusText);
+                    }
+                }
+            };
+            xhr.send(jsonInput);
+        }
+
+        function clearJsonInput() {
+        document.getElementById('jsonInput').value = '';
+    }
+
+    function clearXmlOutput() {
+        document.getElementById('xmlOutput').value = '';
+    }
+
+    function downloadXml() {
+        var xmlContent = document.getElementById('xmlOutput').value;
+
+        if (xmlContent.trim() !== '') {
+            var blob = new Blob([xmlContent], { type: 'application/xml' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'output.xml';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } else {
+            alert('No XML content to download.');
+        }
+    }
+    </script>
+    
+
+</body>
+</html>

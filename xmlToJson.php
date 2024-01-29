@@ -28,7 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             libxml_clear_errors();
             echo json_encode(['error' => 'XML parsing error', 'errors' => $errors]);
         } else {
-            $json = json_encode($xml);
+            // Get the root element name dynamically
+            $rootElementName = $xml->getName();
+
+            // Convert SimpleXMLElement to array
+            $xmlArray = json_decode(json_encode($xml), true);
+
+            // Include the root element in the JSON output with the dynamically obtained key
+            $json = json_encode([$rootElementName => $xmlArray]);
 
             if ($json === false) {
                 echo json_encode(['error' => 'JSON encoding error']);

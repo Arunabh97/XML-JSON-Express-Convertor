@@ -8,15 +8,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($jsonData !== null) {
         // Convert the associative array to XML
-        $xmlData = array_to_xml($jsonData);
+        $xmlData = convertJsonToXml($jsonData);
 
         // Output the XML
         header('Content-Type: application/xml');
-        echo $xmlData;
+        echo format_xml($xmlData);
     } else {
         // Invalid JSON input
         header('HTTP/1.1 400 Bad Request');
-        echo 'Invalid JSON input';
+        echo 'Invalid JSON input: ' . json_last_error_msg() . ' - ' . $jsonInput;
     }
 } else {
     // Invalid request method
@@ -24,20 +24,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo 'Method Not Allowed';
 }
 
+
 // Function to convert an associative array to XML
-function array_to_xml($array, $xml = null) {
+function convertJsonToXml($array, $xml = null) {
     if ($xml === null) {
         $xml = new SimpleXMLElement('<root/>');
     }
 
     foreach ($array as $key => $value) {
         if (is_array($value)) {
-            array_to_xml($value, $xml->addChild($key));
+            if (is_numeric($key)) {
+                $key = 'item'; // when the key is numeric, use 'item' as the element name
+            }
+            convertJsonToXml($value, $xml->addChild($key));
         } else {
             $xml->addChild($key, htmlspecialchars($value));
         }
     }
 
     return $xml->asXML();
+}
+
+// Function to format XML output
+function format_xml($xml) {
+    $dom = new DOMDocument('1.0');
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+    $dom->loadXML($xml);
+    
+    $formattedXml = '';
+    foreach ($dom->documentElement->childNodes as $node) {
+        $formattedXml .= $dom->saveXML($node);
+    }
+
+    return $formattedXml;
 }
 ?>

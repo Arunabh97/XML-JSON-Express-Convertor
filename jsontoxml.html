@@ -53,7 +53,7 @@
     
             // Send JSON data to the PHP file for conversion
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'json_to_xml.php', true);
+            xhr.open('POST', 'jsontoxml.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {

@@ -15,7 +15,9 @@
             <a href="index.html">XML to JSON</a>
             <a href="jsontoxml.html">JSON to XML</a>
         </div>
+        
         <h1>XML to JSON Converter</h1>
+
         <div class="input-row">
             <div class="input-container">
                 <label for="xmlInput">XML Content:</label>
@@ -34,16 +36,16 @@
                 </div>
                 <textarea id="jsonOutput" readonly rows="10"></textarea>
             </div>
+
         </div>
         
         <div class="input-file">
             <div class="file-input-container">
                 <label for="fileInput" class="file-label">Choose XML File</label>
-                <input type="file" id="fileInput" accept=".xml">
+                <input type="file" id="fileInput" accept=".xml" onchange="handleFileSelect()">
             </div>
         </div>
           
-        <!-- New Download Button -->
         <button id="downloadButton" onclick="downloadJson()">Download JSON</button>
     </div>
 
@@ -55,7 +57,7 @@
             let xmlContent;
 
             if (xmlInputTextarea.value.trim() !== '') {
-                // If XML content is entered in the textarea
+                
                 xmlContent = xmlInputTextarea.value;
             } else if (fileInput.files.length > 0) {
                 // If an XML file is selected
@@ -75,6 +77,24 @@
             }
 
             sendXmlToServer(xmlContent);
+        }
+
+        function handleFileSelect() {
+            var fileInput = document.getElementById('fileInput');
+            var xmlInputTextarea = document.getElementById('xmlInput');
+    
+            if (fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+            xmlInputTextarea.value = event.target.result;
+            
+            convertXmlToJson();
+            };
+
+            reader.readAsText(file);
+            }
         }
 
         function sendXmlToServer(xmlContent) {
@@ -113,12 +133,16 @@
                 console.error('JSON content is empty.');
             }
         }
+
         function clearXmlInput() {
             document.getElementById('xmlInput').value = '';
         }
+
         function clearJsonOutput() {
             document.getElementById('jsonOutput').value = '';
         }
+
     </script>
+
 </body>
 </html>

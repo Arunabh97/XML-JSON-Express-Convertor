@@ -26,7 +26,10 @@
                 <textarea id="jsonInput" rows="10"></textarea>
             </div>
 
-            <button onclick="convertJsonToXml()">JSON to XML</button>
+            <button onclick="convertJsonToXml()">
+                <i class="fas fa-code"></i> JSON to XML
+            </button>
+            
 
             <div class="input-container">
                 <label for="xmlOutput">XML Output:</label>
@@ -39,13 +42,18 @@
         
         <div class="input-file">
             <div class="file-input-container">
-                <label for="fileInput" class="file-label">Choose JSON File</label>
+                <label for="fileInput" class="file-label">
+                    <i class="fas fa-file-upload"></i> Choose JSON File
+                </label>                
                 <input type="file" id="fileInput" accept=".json" onchange="handleFileSelect()">
             </div>
             
         </div>
           
-        <button id="downloadButton" onclick="downloadXml()">Download XML</button>
+        <button id="downloadButton" onclick="downloadXml()">
+            <i class="fas fa-download"></i> Download XML
+        </button>
+        
     </div>
 
     <script>

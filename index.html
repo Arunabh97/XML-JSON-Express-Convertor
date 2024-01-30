@@ -27,7 +27,10 @@
                 <textarea id="xmlInput" rows="10"></textarea>
             </div>
 
-            <button onclick="convertXmlToJson()">XML to JSON</button>
+            <button onclick="convertXmlToJson()">
+                <i class="fas fa-file-code"></i> XML to JSON
+            </button>
+            
 
             <div class="input-container">
                 <label for="jsonOutput">JSON Output:</label>
@@ -41,12 +44,17 @@
         
         <div class="input-file">
             <div class="file-input-container">
-                <label for="fileInput" class="file-label">Choose XML File</label>
+                <label for="fileInput" class="file-label">
+                    <i class="fas fa-file-upload"></i> Choose XML File
+                </label>
                 <input type="file" id="fileInput" accept=".xml" onchange="handleFileSelect()">
             </div>
         </div>
           
-        <button id="downloadButton" onclick="downloadJson()">Download JSON</button>
+        <button id="downloadButton" onclick="downloadJson()">
+            <i class="fas fa-download"></i> Download JSON
+        </button>
+        
     </div>
 
     <script>
@@ -57,7 +65,7 @@
             let xmlContent;
 
             if (xmlInputTextarea.value.trim() !== '') {
-                
+
                 xmlContent = xmlInputTextarea.value;
             } else if (fileInput.files.length > 0) {
                 // If an XML file is selected
